@@ -1,0 +1,1 @@
+# Se crea la carpeta applications con el fin de tener organizado el proyecto o el servicio con el fin de que django por medio del archivo __init__.py leea e interprete esto como un archivo que es importante de leer 

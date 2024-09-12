@@ -1,0 +1,163 @@
+# Este archivo docker-compose.yml unifica todos los contenedores necesarios para la aplicación Scholar Transpro.
+# Define los servicios, las redes y los volúmenes, simplificando el despliegue y la gestión de la aplicación.
+
+
+version: '3.8'
+
+services:
+  servicio_instituciones:
+    build:
+      context: ./servicio_instituciones
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./servicio_instituciones/educational_institutions:/usr/src/app
+    environment:
+      - DEBUG=True
+      - ALLOWED_HOSTS=*
+      - DB_NAME=schollar_transpro
+      - DB_USER=transporte
+      - DB_PASSWORD=parada2023
+      - DB_HOST=db
+      - DB_PORT=5432
+    depends_on:
+      - db
+    command: python manage.py runserver 0.0.0.0:8000
+
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=schollar_transpro
+      - POSTGRES_USER=transporte
+      - POSTGRES_PASSWORD=parada2023
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:
+
+
+#version: '3.8'  # Especifica la versión de Docker Compose a utilizar.
+#
+#services:
+#  # Servicio de base de datos PostgreSQL
+#  #database-service:
+#    #image: "postgres"  # Utiliza la imagen oficial de Postgres, asegurando una base de datos confiable.
+#    #container_name: postgres_db  # Asigna un nombre al contenedor para facilitar su identificación.
+#    #environment:
+#    #  POSTGRES_DB: schollar_transpro  # Define el nombre de la base de datos.
+#    #  POSTGRES_USER: transporte  # Usuario que tendrá acceso a la base de datos.
+#    #  POSTGRES_PASSWORD: parada2023  # Contraseña para el usuario definido.
+#    #ports:
+#    #  - "5432:5432"  # Mapea el puerto 5432 del contenedor al puerto 5432 de la máquina host para permitir conexiones externas.
+#    #networks:
+#    #  - app-tier  # Conecta este servicio a la red interna "app-tier" para comunicación con otros servicios.
+#    #volumes:
+#    #  - postgres_data:/var/lib/postgresql/data  # Define un volumen para persistir los datos de la base de datos.
+#
+#  # Servicio para gestionar las instituciones educativas
+#  educational_institutions:
+#    restart: always  # Asegura que el contenedor se reinicie automáticamente en caso de fallo.
+#    build: ./servicio_instituciones  # Construye la imagen a partir del Dockerfile en el directorio especificado.
+#    container_name: educational_institutions_service  # Asigna un nombre al contenedor para identificarlo fácilmente.
+#    ports:
+#      - "8001:8001"  # Expone el puerto 8001 del contenedor al puerto 8001 de la máquina host.
+#    volumes:
+#      - ./servicio_instituciones:/usr/src/app  # Mapea el código fuente en el host al contenedor para facilitar el desarrollo.
+#    networks:
+#      - app-tier  # Conecta este servicio a la red interna "app-tier".
+#    #depends_on:
+#      #- database-service  # Define una dependencia con el servicio de base de datos, asegurando que se inicie primero.
+#
+#  # Servicio para gestionar las rutas escolares
+#  school_routes:
+#    restart: always  # Asegura que el contenedor se reinicie automáticamente en caso de fallo.
+#    build: ./servicio_rutas  # Construye la imagen a partir del Dockerfile en el directorio especificado.
+#    container_name: school_routes_service  # Asigna un nombre al contenedor para identificarlo fácilmente.
+#    ports:
+#      - "8002:8002"  # Expone el puerto 8002 del contenedor al puerto 8002 de la máquina host.
+#    volumes:
+#      - ./servicio_rutas:/usr/src/app  # Mapea el código fuente en el host al contenedor.
+#    networks:
+#      - app-tier  # Conecta este servicio a la red interna "app-tier".
+#    #depends_on:
+#      #- database-service  # Define una dependencia con el servicio de base de datos.
+#
+#  # Servicio para gestionar los estudiantes
+#  students:
+#    restart: always  # Asegura que el contenedor se reinicie automáticamente en caso de
+#    build: ./servicio_estudiantes  # Construye la imagen a partir del Dockerfile en el directorio especificado.
+#    container_name: students_service  # Asigna un nombre al contenedor para identificarlo fácilmente.
+#    ports:
+#      - "8003:8003"  # Expone el puerto 8003 del contenedor al puerto 8003 de la máquina host.
+#    volumes:
+#      - ./servicio_estudiantes:/usr/src/app  # Mapea el código fuente en el host al contenedor.
+#    networks:
+#      - app-tier  # Conecta este servicio a la red interna "app-tier".
+#    #depends_on:
+#      #- database-service  # Define una dependencia con el servicio de base de datos.
+#
+#  # Servicio para gestionar los vehículos
+#  vehicles:
+#    build: ./servicio_vehiculos  # Construye la imagen a partir del Dockerfile en el directorio especificado.
+#    container_name: vehicles_service  # Asigna un nombre al contenedor para identificarlo fácilmente.
+#    ports:
+#      - "8004:8004"  # Expone el puerto 8004 del contenedor al puerto 8004 de la máquina host.
+#    volumes:
+#      - ./servicio_vehiculos:/usr/src/app  # Mapea el código fuente en el host al contenedor.
+#    networks:
+#      - app-tier  # Conecta este servicio a la red interna "app-tier".
+#    #depends_on:
+#      #- database-service  # Define una dependencia con el servicio de base de datos.
+#
+#  # Servicio para gestionar los conductores
+#  drivers:
+#    build: ./servicio_conductores  # Construye la imagen a partir del Dockerfile en el directorio especificado.
+#    container_name: drivers_service  # Asigna un nombre al contenedor para identificarlo fácilmente.
+#    ports:
+#      - "8005:8005"  # Expone el puerto 8005 del contenedor al puerto 8005 de la máquina host.
+#    volumes:
+#      - ./servicio_conductores:/usr/src/app  # Mapea el código fuente en el host al contenedor.
+#    networks:
+#      - app-tier  # Conecta este servicio a la red interna "app-tier".
+#    #depends_on:
+#      #- database-service  # Define una dependencia con el servicio de base de datos.
+#
+#  # Servicio para gestionar los pagos y multas de los estudiantes
+#  payments_fines:
+#    build: ./servicio_pago_estudiantes  # Construye la imagen a partir del Dockerfile en el directorio especificado.
+#    container_name: payments_fines_service  # Asigna un nombre al contenedor para identificarlo fácilmente.
+#    ports:
+#      - "8006:8006"  # Expone el puerto 8006 del contenedor al puerto 8006 de la máquina host.
+#    volumes:
+#      - ./servicio_pago_estudiantes:/usr/src/app  # Mapea el código fuente en el host al contenedor.
+#    networks:
+#      - app-tier  # Conecta este servicio a la red interna "app-tier".
+#    #depends_on:
+#      #- database-service  # Define una dependencia con el servicio de base de datos.
+#
+#  # Servicio para el seguimiento en tiempo real de las rutas
+#  real_time_tracking:
+#    build: ./servicio_seguimiento_rutas  # Construye la imagen a partir del Dockerfile en el directorio especificado.
+#    container_name: real_time_tracking_service  # Asigna un nombre al contenedor para identificarlo fácilmente.
+#    ports:
+#      - "8007:8007"  # Expone el puerto 8007 del contenedor al puerto 8007 de la máquina host.
+#    volumes:
+#      - ./servicio_seguimiento_rutas:/usr/src/app  # Mapea el código fuente en el host al contenedor.
+#    networks:
+#      - app-tier  # Conecta este servicio a la red interna "app-tier".
+#    #depends_on:
+#      #- database-service  # Define una dependencia con el servicio de base de datos.
+#
+## Definición de la red interna para conectar los servicios entre sí
+#networks:
+#  app-tier:
+#    driver: bridge  # Utiliza el controlador "bridge" para la red interna que conecta los servicios.
+#
+## Definición de volúmenes para almacenar datos de manera persistente
+#volumes:
+#  postgres_data:  # Define un volumen para la persistencia de datos del servicio de base de datos PostgreSQL.
+#
