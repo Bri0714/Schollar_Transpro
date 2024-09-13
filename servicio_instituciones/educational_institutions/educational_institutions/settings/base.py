@@ -32,6 +32,8 @@ DJANGO_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Cors headers
+    'corsheaders'
 )
 
 # APLICCIONES LOCALES
@@ -52,6 +54,8 @@ INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    # cors headers
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -116,6 +120,12 @@ USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# cors
+# cors indica quien puede conectarse a nuestro backend
+# pip install django-cors-headers
+# cors autorizacion
 
+CORS_ALLOWED_ORIGINS = [
+    #REACT 
+    "http://localhost:3000"
+]
 
