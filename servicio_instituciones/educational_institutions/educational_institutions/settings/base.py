@@ -17,8 +17,10 @@ def get_secrets(secret_name, secrets = secrets):
         msg = f' La variable {secret_name} no existe'
         raise ImproperlyConfigured(msg)
 
+SECRET_KEY = get_secrets('SECRET_KEY')
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-b()6355961o4u+#a^d-2*u^^b(hg=(hd$e)&ab6&ind*$7(wq!'
+# SECRET_KEY = 'django-insecure-b()6355961o4u+#a^d-2*u^^b(hg=(hd$e)&ab6&ind*$7(wq!'
 
 
 
@@ -113,3 +115,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# cors
+
+
