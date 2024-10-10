@@ -3,7 +3,8 @@ import os
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['servicio_ruta', 'servicio_instituciones', 'localhost', '127.0.0.1', '*']
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
+print(f'ALLOWED_HOSTS = {ALLOWED_HOSTS}')
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases

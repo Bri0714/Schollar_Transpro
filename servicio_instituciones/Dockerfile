@@ -1,5 +1,5 @@
 # Usa la imagen oficial de Python 3 como base
-FROM python:3
+FROM python:3.10-slim
 
 # Copia todo el contenido de la carpeta actual al directorio /usr/src/app dentro del contenedor
 COPY . /usr/src/app
