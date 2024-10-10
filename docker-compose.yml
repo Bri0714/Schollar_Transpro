@@ -23,7 +23,31 @@ services:
       - DB_PORT=5432
     depends_on:
       - db
+    networks:
+      - schollar_net
     command: python manage.py runserver 0.0.0.0:8000
+
+  servicio_ruta:
+    build:
+      context: ./servicio_rutas
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./servicio_rutas/school_routes:/usr/src/app
+    environment:
+      - DEBUG=True
+      - ALLOWED_HOSTS=*
+      - DB_NAME=schollar_transpro_ruta
+      - DB_USER=transporte_ruta
+      - DB_PASSWORD=parada2023
+      - DB_HOST=db_ruta
+      - DB_PORT=5432
+    depends_on:
+      - db_ruta
+    networks:
+      - schollar_net
+    command: python manage.py runserver 0.0.0.0:8001
 
   db:
     image: postgres:13
@@ -35,9 +59,30 @@ services:
       - POSTGRES_PASSWORD=parada2023
     ports:
       - "5432:5432"
+    networks:
+      - schollar_net
+
+  db_ruta:
+    image: postgres:13
+    volumes:
+      - postgres_data_ruta:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=schollar_transpro_ruta
+      - POSTGRES_USER=transporte_ruta
+      - POSTGRES_PASSWORD=parada2023
+    ports:
+      - "5433:5432"
+    networks:
+      - schollar_net
 
 volumes:
   postgres_data:
+  postgres_data_ruta:
+
+networks:
+  schollar_net:
+    driver: bridge
+
 
 
 #version: '3.8'  # Especifica la versión de Docker Compose a utilizar.
